@@ -160,6 +160,9 @@ class DataObjectManager extends ComplexTableField
 		    $this->hasNested = true;
 		    $this->setPopupWidth(850);
 		  }
+		  elseif(class_exists("KickAssetField") && $field instanceof KickAssetField) {
+			$this->setPopupWidth(850);
+		  }
 		}
 
 	}
@@ -489,7 +492,7 @@ class DataObjectManager extends ComplexTableField
 		
 	public function Sortable()
 	{
-		return SortableDataObject::is_sortable_class($this->sourceClass());
+		return DataObject::has_extension($this->sourceClass(), 'SortableDataObject');
 	}
 	
 	public function setFilter($field, $label, $map, $default = null)
@@ -807,11 +810,12 @@ class DataObjectManager_Popup extends Form {
 		$this->dataObject = $dataObject;
 		Requirements::clear();
 		Requirements::clear_combined_files();
+		// added prototype.js to provide support for TreeDropdownField
+		Requirements::javascript(THIRDPARTY_DIR.'/prototype/prototype.js');
 	    Requirements::javascript(THIRDPARTY_DIR.'/jquery/jquery.js');
 		Requirements::javascript(THIRDPARTY_DIR.'/jquery-livequery/jquery.livequery.js');    
 		Requirements::block(THIRDPARTY_DIR.'/behaviour.js');
 		Requirements::block(SAPPHIRE_DIR.'/javascript/Validator.js');
-		Requirements::block(THIRDPARTY_DIR.'/prototype.js');
 		Requirements::clear(THIRDPARTY_DIR.'/behavior.js');
 		Requirements::block(THIRDPARTY_DIR.'/behavior.js');
 		Requirements::block(SAPPHIRE_DIR.'/javascript/ComplexTableField.js');
