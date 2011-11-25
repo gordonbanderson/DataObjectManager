@@ -158,7 +158,25 @@ $.fn.DataObjectManager.init = function(obj) {
 				$list = $(this);
 				do_class = $.trim($list.attr('class').replace('sortable-','').replace('ui-sortable',''));
 				type = $container.hasClass('ManyMany') ? $container.find('input[name=controllerID]').val() : '';
-				$.post('DataObjectManager_Controller/dosort/'+do_class+'/'+type, $list.sortable("serialize"));
+				//alert('sorting');
+
+
+				/*
+				$.post('DataObjectManager_Controller/dosort/'+do_class+'/'+type,
+					$list.sortable("serialize"),
+					function(data, textStatus, jqXHR) {
+						alert('success from post');
+					}
+				);
+				*/
+
+				$.ajax({
+  type: 'POST',
+  url: 'DataObjectManager_Controller/dosort/'+do_class+'/'+type,
+  data: $list.sortable("serialize"),
+  //success: success,
+  dataType: 'script'
+});
 				e.stopPropagation();
 			},
 			items : 'li:not(.head)',
