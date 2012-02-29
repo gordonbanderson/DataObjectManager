@@ -118,8 +118,28 @@ class SortableDataObject extends DataObjectDecorator
  	public function onBeforeWrite()
 	{
 		if(!$this->owner->ID) {
-			if($peers = DataObject::get($this->owner->class))
-				$this->owner->SortOrder = $peers->Count()+1;
+    		$sortOrder = 0;
+    		$records   = DB::query(
+        		sprintf(
+            		"SELECT
+                		MAX(SortOrder) AS maxSortOrder
+            		FROM
+                		File
+            		WHERE
+                		ClassName = '%s'",
+	            	$this->owner->class
+        		)
+    		);
+
+		    if ($records) {
+		        foreach ($records as $record) {
+		            $sortOrder = $record['maxSortOrder'];
+		            break;
+		        }
+
+		        $sortOrder = (int) $sortOrder + 1;
+		    }
+		    $this->owner->SortOrder = $sortOrder;
 		}
 	}	
 
