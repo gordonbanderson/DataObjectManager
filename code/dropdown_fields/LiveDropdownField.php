@@ -16,6 +16,10 @@ class LiveDropdownField extends HiddenField {
 	public function getresults(SS_HTTPRequest $r) {
 
 			$q = Convert::raw2sql($r->requestVar('q'));
+			$locale = Convert::raw2sql($r->requestVar('l'));
+			if ($locale) {
+				Translatable::set_reading_lang($locale);
+			}
 			$results = DataObject::get($this->sourceClass,$this->labelField . " LIKE '%{$q}%'");
 			if($results) {
 				$set = new DataObjectSet();
