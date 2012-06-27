@@ -1,4 +1,10 @@
 (function($) {
+
+	$.urlParam = function(name){
+		var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+		return results[1] || 0;
+	}
+
 	var request = false;
 	$.fn.autoComplete = function() {
 		return this.each(function() {
@@ -30,9 +36,10 @@
 					if(request) window.clearTimeout(request);
 					request = window.setTimeout(function() {
 						if($input.val().length) {
+							var $locale = $.urlParam('locale');
 							$resultsDiv.load(
 								url, 
-								{q : $input.val()},
+								{q : $input.val(), l: $locale},
 								function(data) {
 									if(data.length)
 										$resultsDiv.show();
@@ -53,11 +60,12 @@
 			
 			if($container.hasClass('livedropdownfield')) {
 				$container.find('.livedropdown_browse').click(function() {
+					var $locale = $.urlParam('locale');
 					var $t = $(this);				
 					var $resultsDiv = $(this).siblings('.autocomplete_results');
 					$resultsDiv.load(
 						$t.siblings('.autocomplete_input').metadata().url, 
-						{q : ''},
+						{q : '', l: $locale},
 						function(data) {
 							if(data.length) {
 								$resultsDiv.show();
