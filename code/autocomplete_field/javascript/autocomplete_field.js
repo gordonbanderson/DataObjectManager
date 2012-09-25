@@ -1,8 +1,22 @@
 (function($) {
 
 	$.urlParam = function(name){
+		console.log(window.location.href+" -> "+name);
 		var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
-		return results[1] || 0;
+		if (results == null) {
+			return null;
+		} else {
+			return results[1] || 0;			
+		}
+	}
+
+	$.getLocale = function() {
+		var loc = $.urlParam();
+		console.log("LOC T1: loc="+loc);
+		if (loc == null) {
+			loc = $($("input[name='Locale']")[0]).val();
+		}
+		return loc;
 	}
 
 	var request = false;
@@ -36,7 +50,7 @@
 					if(request) window.clearTimeout(request);
 					request = window.setTimeout(function() {
 						if($input.val().length) {
-							var $locale = $.urlParam('locale');
+							var $locale = $.getLocale();
 							$resultsDiv.load(
 								url, 
 								{q : $input.val(), l: $locale},
@@ -60,7 +74,7 @@
 			
 			if($container.hasClass('livedropdownfield')) {
 				$container.find('.livedropdown_browse').click(function() {
-					var $locale = $.urlParam('locale');
+					var $locale = $.getLocale();
 					var $t = $(this);				
 					var $resultsDiv = $(this).siblings('.autocomplete_results');
 					$resultsDiv.load(
