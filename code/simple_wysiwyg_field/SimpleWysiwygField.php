@@ -71,6 +71,4 @@ class SimpleWysiwygField extends TextareaField
   }
 
 }
-
-
-
+?>
