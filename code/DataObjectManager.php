@@ -1180,5 +1180,4 @@ class DOMUtil
   }
 	
 }
-
-
+?>
